@@ -16,6 +16,7 @@ fileprivate struct PendingBinaryOperationInfo {
 
 fileprivate enum Operation {
     case constant(Double)
+    case independentOperation(() -> Double)
     case unaryOperation((Double) -> Double)
     case binaryOperation((Double, Double) -> Double)
     case equals
@@ -24,6 +25,7 @@ fileprivate enum Operation {
 fileprivate let operations: Dictionary<String, Operation> = [
     "π": Operation.constant(M_PI),
     "e": Operation.constant(M_E),
+    "🎲": Operation.independentOperation({return Double(arc4random()) / Double(UInt32.max)}),
     "√": Operation.unaryOperation(sqrt),
     "cos": Operation.unaryOperation(cos),
     "sin": Operation.unaryOperation(sin),
@@ -62,12 +64,14 @@ class CalculatorBrain {
         if let operation = operations[symbol] {
             switch operation {
             case .constant(let constant):
-                if !isPartialResult { // this is a new operation, so clear the stack
-                    operands.removeAll()
-                    operators.removeAll()
-                }
+                checkResult()
                 operands.append(symbol)
                 accumulator = constant
+            case .independentOperation(let function):
+                checkResult()
+                accumulator = function()
+                operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
+                numberTyped = false
             case .unaryOperation(let function):
                 parseAccumulator(symbol: symbol)
                 accumulator = function(accumulator)
@@ -88,6 +92,13 @@ class CalculatorBrain {
             }
             parseDescription()
 
+        }
+    }
+    
+    private func checkResult() {
+        if !isPartialResult { // this is a new operation, so clear the stack
+            operands.removeAll()
+            operators.removeAll()
         }
     }
     
