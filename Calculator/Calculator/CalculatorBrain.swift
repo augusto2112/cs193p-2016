@@ -36,19 +36,6 @@ fileprivate let operations: Dictionary<String, Operation> = [
     "=": Operation.equals
 ]
 
-
-extension Double {
-    func descriptionFormat() -> String {
-        let isInt = floor(self) == self
-        if isInt {
-            return String(format:"%d", Int(self))
-        } else {
-            return String(format:"%.03f ", self)
-
-        }
-    }
-}
-
 class CalculatorBrain {
     fileprivate var accumulator = 0.0
     fileprivate var pending: PendingBinaryOperationInfo?
@@ -57,6 +44,14 @@ class CalculatorBrain {
     fileprivate var operators: [String] = []
     var description = ""
     var numberTyped = false
+    
+    fileprivate let descriptionFormatter: NumberFormatter = {
+        var formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 6
+        formatter.minimumFractionDigits = 0
+        formatter.minimumIntegerDigits = 1
+        return formatter
+    }()
     
     
     func set(operand: Double) {
@@ -84,7 +79,7 @@ class CalculatorBrain {
                 numberTyped = false
             case .equals:
                 if numberTyped {
-                    operands.append(accumulator.descriptionFormat())
+                    operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
                     numberTyped = false
                 }
                 executePendingBinaryOperation()
@@ -102,9 +97,9 @@ class CalculatorBrain {
                 operands.removeAll()
                 operators.removeAll()
             }
-            operands.append(accumulator.descriptionFormat())
+            operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
         } else if isPartialResult {
-            operands.append(accumulator.descriptionFormat())
+            operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
         }
         operators.append(symbol)
     }

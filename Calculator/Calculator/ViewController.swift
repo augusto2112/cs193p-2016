@@ -14,7 +14,15 @@ class ViewController: UIViewController {
     
     fileprivate var brain = CalculatorBrain()
     
-    var userIsInTheMiddleOfTyping = false
+    fileprivate var userIsInTheMiddleOfTyping = false
+    
+    fileprivate let displayFormatter: NumberFormatter = {
+        var formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 6
+        formatter.minimumFractionDigits = 0
+        formatter.minimumIntegerDigits = 1
+        return formatter
+    }()
     
     @IBAction func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
@@ -35,17 +43,21 @@ class ViewController: UIViewController {
         brain.numberTyped = true
     }
     
-    fileprivate var displayValue: Double {
+    fileprivate var displayValue: Double? {
         get {
-            return Double(display.text!)!
+            return Double(display.text!)
         }
         set {
-            display.text = String(newValue)
+            if let value = newValue {
+                display.text = displayFormatter.string(from: NSNumber(value: value)) // is NSNumber REALLY necessary here??
+            } else {
+                display.text = "0"
+            }
         }
     }
     @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping {
-            brain.set(operand: displayValue)
+            brain.set(operand: displayValue!)
             userIsInTheMiddleOfTyping = false
         }
         
