@@ -64,6 +64,16 @@ class ViewController: UIViewController {
         updateOperationLabel()
     }
     
+    @IBAction func backspace() {
+        if userIsInTheMiddleOfTyping {
+            if display.text!.characters.count == 1 {
+                display.text = "0"
+                userIsInTheMiddleOfTyping = false;
+            } else if display.text!.characters.count > 1 {
+                display.text = display.text!.substring(to: display.text!.index(before: display.text!.endIndex))
+            }
+        }
+    }
     func updateOperationLabel() {
         if !brain.description.isEmpty {
             if brain.isPartialResult {

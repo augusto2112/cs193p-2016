@@ -67,7 +67,7 @@ class CalculatorBrain {
         if let operation = operations[symbol] {
             switch operation {
             case .constant(let constant):
-                if !isPartialResult {
+                if !isPartialResult { // this is a new operation, so clear the stack
                     operands.removeAll()
                     operators.removeAll()
                 }
@@ -98,7 +98,7 @@ class CalculatorBrain {
     
     private func parseAccumulator(symbol:String) {
         if numberTyped {
-            if !isPartialResult {
+            if !isPartialResult { 
                 operands.removeAll()
                 operators.removeAll()
             }
