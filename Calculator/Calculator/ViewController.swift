@@ -49,7 +49,7 @@ class ViewController: UIViewController {
         }
         set {
             if let value = newValue {
-                display.text = displayFormatter.string(from: NSNumber(value: value)) // is NSNumber REALLY necessary here??
+                display.text = displayFormatter.string(from: value)
             } else {
                 display.text = "0"
             }

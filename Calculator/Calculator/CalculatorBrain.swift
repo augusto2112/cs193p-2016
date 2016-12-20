@@ -70,7 +70,7 @@ class CalculatorBrain {
             case .independentOperation(let function):
                 checkResult()
                 accumulator = function()
-                operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
+                operands.append(descriptionFormatter.string(from: accumulator)!)
                 numberTyped = false
             case .unaryOperation(let function):
                 parseAccumulator(symbol: symbol)
@@ -83,7 +83,7 @@ class CalculatorBrain {
                 numberTyped = false
             case .equals:
                 if numberTyped {
-                    operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
+                    operands.append(descriptionFormatter.string(from: accumulator)!)
                     numberTyped = false
                 }
                 executePendingBinaryOperation()
@@ -108,9 +108,9 @@ class CalculatorBrain {
                 operands.removeAll()
                 operators.removeAll()
             }
-            operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
+            operands.append(descriptionFormatter.string(from: accumulator)!)
         } else if isPartialResult {
-            operands.append(descriptionFormatter.string(from: NSNumber(value: accumulator))!)
+            operands.append(descriptionFormatter.string(from: accumulator)!)
         }
         operators.append(symbol)
     }

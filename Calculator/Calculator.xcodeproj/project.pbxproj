@@ -13,6 +13,7 @@
 		14589EB41E041E5A0041A94F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14589EB31E041E5A0041A94F /* Assets.xcassets */; };
 		14589EB71E041E5A0041A94F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14589EB51E041E5A0041A94F /* LaunchScreen.storyboard */; };
 		14589EBF1E0426E50041A94F /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14589EBE1E0426E50041A94F /* CalculatorBrain.swift */; };
+		14C0378E1E09A6980098B6B0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C0378D1E09A6980098B6B0 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		14589EB61E041E5A0041A94F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		14589EB81E041E5A0041A94F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14589EBE1E0426E50041A94F /* CalculatorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
+		14C0378D1E09A6980098B6B0 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				14589EBE1E0426E50041A94F /* CalculatorBrain.swift */,
 				14589EAE1E041E5A0041A94F /* ViewController.swift */,
 				14589EB01E041E5A0041A94F /* Main.storyboard */,
+				14C0378D1E09A6980098B6B0 /* Extensions.swift */,
 				14589EB31E041E5A0041A94F /* Assets.xcassets */,
 				14589EB51E041E5A0041A94F /* LaunchScreen.storyboard */,
 				14589EB81E041E5A0041A94F /* Info.plist */,
@@ -142,6 +145,7 @@
 				14589EBF1E0426E50041A94F /* CalculatorBrain.swift in Sources */,
 				14589EAF1E041E5A0041A94F /* ViewController.swift in Sources */,
 				14589EAD1E041E5A0041A94F /* AppDelegate.swift in Sources */,
+				14C0378E1E09A6980098B6B0 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +307,7 @@
 				14589EBD1E041E5A0041A94F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
