@@ -67,6 +67,10 @@ class CalculatorBrain {
         if let operation = operations[symbol] {
             switch operation {
             case .constant(let constant):
+                if !isPartialResult {
+                    operands.removeAll()
+                    operators.removeAll()
+                }
                 operands.append(symbol)
                 accumulator = constant
             case .unaryOperation(let function):
@@ -99,6 +103,8 @@ class CalculatorBrain {
                 operators.removeAll()
             }
             operands.append(accumulator.descriptionFormat())
+        } else if isPartialResult {
+            operands.append(accumulator.descriptionFormat())
         }
         operators.append(symbol)
     }
@@ -106,8 +112,7 @@ class CalculatorBrain {
     fileprivate func parseDescription() {
         while !operators.isEmpty {
             let op = operators.popLast()!
-            if let opType = operations[op] {
-                let operand = operands.popLast()!
+            if let opType = operations[op], let operand = operands.popLast(){
                 switch opType {
                 case .unaryOperation:
                     operands.append(op+"("+operand+")")
@@ -124,7 +129,8 @@ class CalculatorBrain {
                         operands.append(operand)
                     }
                 default:
-                    print(op + "is not recognized as any type")
+                    print(op + "is not recognized as any oeprator type")
+                    exit(0)
                 }
                 description = operands.last!
             }
