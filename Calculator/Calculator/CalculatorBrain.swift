@@ -55,13 +55,46 @@ class CalculatorBrain {
         return formatter
     }()
     
+    fileprivate var internalProgram = [AnyObject]()
+    
+    var program: AnyObject {
+        get {
+            return internalProgram as AnyObject
+        }
+
+        set {
+            clear()
+            if let arrayOfOps = newValue as? [AnyObject] {
+                for op in arrayOfOps {
+                    if let operand = op as? Double {
+                        set(operand: operand)
+                    } else if let operation = op as? String {
+                        perform(operation: operation)
+                    }
+                }
+            }
+        }
+    }
+    
+    fileprivate func clear() {
+        accumulator = 0.0
+        pending = nil
+        internalProgram.removeAll()
+        numberTyped = false
+        description = ""
+        operands.removeAll()
+        operators.removeAll()
+    }
     
     func set(operand: Double) {
+        numberTyped = true
         accumulator = operand
+        internalProgram.append(operand as AnyObject)
     }
     
     func perform(operation symbol: String){
         if let operation = operations[symbol] {
+            internalProgram.append(symbol as AnyObject)
             switch operation {
             case .constant(let constant):
                 checkResult()
@@ -95,14 +128,14 @@ class CalculatorBrain {
         }
     }
     
-    private func checkResult() {
+    fileprivate func checkResult() {
         if !isPartialResult { // this is a new operation, so clear the stack
             operands.removeAll()
             operators.removeAll()
         }
     }
     
-    private func parseAccumulator(symbol:String) {
+    fileprivate func parseAccumulator(symbol:String) {
         if numberTyped {
             if !isPartialResult { 
                 operands.removeAll()

@@ -40,7 +40,6 @@ class ViewController: UIViewController {
             }
         }
         userIsInTheMiddleOfTyping = true
-        brain.numberTyped = true
     }
     
     fileprivate var displayValue: Double? {
@@ -55,6 +54,7 @@ class ViewController: UIViewController {
             }
         }
     }
+    
     @IBAction func performOperation(_ sender: UIButton) {
         if userIsInTheMiddleOfTyping {
             brain.set(operand: displayValue!)
@@ -86,6 +86,22 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    var savedProgram: AnyObject?
+    
+    @IBAction func save() {
+        savedProgram = brain.program
+    }
+    
+    @IBAction func restore() {
+        if let program = savedProgram {
+            brain.program = program
+            displayValue = brain.result
+            updateOperationLabel()
+        }
+    }
+    
+    
     func updateOperationLabel() {
         if !brain.description.isEmpty {
             if brain.isPartialResult {
