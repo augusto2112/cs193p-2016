@@ -147,9 +147,13 @@ class CalculatorBrain {
     
     func removeLastOp() {
         if !internalProgram.isEmpty {
-            internalProgram.removeLast()
+            var op = internalProgram.removeLast() as? String
+            while op == "=" && !internalProgram.isEmpty { // if the last op was a "=", remove the one before as well
+                op = internalProgram.removeLast() as? String
+            }
         }
         rerun(program: program)
+        print(accumulator)
     }
     
     fileprivate func rerun(program: AnyObject) {

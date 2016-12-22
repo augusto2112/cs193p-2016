@@ -86,7 +86,7 @@ class ViewController: UIViewController {
             }
         } else {
             brain.removeLastOp()
-            displayValue = 0.0
+            displayValue = brain.result
             updateOperationLabel()
         }
     }
