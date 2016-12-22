@@ -84,6 +84,10 @@ class ViewController: UIViewController {
             } else if display.text!.characters.count > 1 {
                 display.text = display.text!.substring(to: display.text!.index(before: display.text!.endIndex))
             }
+        } else {
+            brain.removeLastOp()
+            displayValue = 0.0
+            updateOperationLabel()
         }
     }
     
@@ -113,5 +117,19 @@ class ViewController: UIViewController {
             operationLabel.text = "0"
         }
     }
+    
+    @IBAction func saveVariable() {
+        brain.variableValues["M"] = displayValue!
+        displayValue = brain.result
+        updateOperationLabel()
+        userIsInTheMiddleOfTyping = false
+    }
+    
+    
+    @IBAction func getVariable() {
+        brain.set(operand: "M")
+        displayValue = brain.result
+    }
+    
 }
 

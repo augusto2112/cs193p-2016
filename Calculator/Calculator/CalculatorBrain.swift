@@ -44,7 +44,36 @@ class CalculatorBrain {
     
     fileprivate var operands: [String] = []
     fileprivate var operators: [String] = []
-    var description = ""
+    var description: String {
+        get {
+            enum CalculatorState {
+                case started
+                case firstOperandSet
+                case binaryOperationSet
+                case concluded
+            }
+            
+            var state = CalculatorState.started
+            var currentProgram = internalProgram
+            
+            var firstOperand: AnyObject?
+            var secondOperand: AnyObject?
+            var currentOperator: String?
+            
+            for value in currentProgram {
+                if value is Double && state == .started {
+                    firstOperand = value
+                    state = .firstOperandSet
+                } else if value is Double && state == .firstOperandSet {
+                    firstOperand = value
+                } else if let op = value as? String {
+                    if let operationType = operations[op] {
+                        if operationType ==
+                    }
+                }
+            }
+        }
+    }
     var numberTyped = false
     
     fileprivate let descriptionFormatter: NumberFormatter = {
@@ -63,17 +92,33 @@ class CalculatorBrain {
         }
 
         set {
-            clear()
-            if let arrayOfOps = newValue as? [AnyObject] {
-                for op in arrayOfOps {
-                    if let operand = op as? Double {
-                        set(operand: operand)
-                    } else if let operation = op as? String {
-                        perform(operation: operation)
+            rerun(program: newValue)
+        }
+    }
+    
+    func removeLastOp() {
+        if !internalProgram.isEmpty {
+            internalProgram.removeLast()
+        }
+        rerun(program: program)
+    }
+    
+    fileprivate func rerun(program: AnyObject) {
+        clear()
+        if let arrayOfOps = program as? [AnyObject] {
+            for op in arrayOfOps {
+                if let operand = op as? Double {
+                    set(operand: operand)
+                } else if let operationOrVariable = op as? String {
+                    if operations[operationOrVariable] != nil {
+                        perform(operation: operationOrVariable)
+                    } else if variableValues[operationOrVariable] != nil{
+                        set(operand: operationOrVariable)
                     }
                 }
             }
         }
+
     }
     
     fileprivate func clear() {
@@ -90,6 +135,7 @@ class CalculatorBrain {
         numberTyped = true
         accumulator = operand
         internalProgram.append(operand as AnyObject)
+        print(internalProgram)
     }
     
     func perform(operation symbol: String){
@@ -104,27 +150,23 @@ class CalculatorBrain {
                 checkResult()
                 accumulator = function()
                 operands.append(descriptionFormatter.string(from: accumulator)!)
-                numberTyped = false
             case .unaryOperation(let function):
                 parseAccumulator(symbol: symbol)
                 accumulator = function(accumulator)
-                numberTyped = false
             case .binaryOperation(let function):
                 parseAccumulator(symbol: symbol)
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: function, firstOperand: accumulator)
-                numberTyped = false
             case .equals:
                 if numberTyped {
                     operands.append(descriptionFormatter.string(from: accumulator)!)
-                    numberTyped = false
                 }
                 executePendingBinaryOperation()
                 operators.append(symbol)
 
             }
+            numberTyped = false
             parseDescription()
-
         }
     }
     
@@ -137,10 +179,7 @@ class CalculatorBrain {
     
     fileprivate func parseAccumulator(symbol:String) {
         if numberTyped {
-            if !isPartialResult { 
-                operands.removeAll()
-                operators.removeAll()
-            }
+            checkResult()
             operands.append(descriptionFormatter.string(from: accumulator)!)
         } else if isPartialResult {
             operands.append(descriptionFormatter.string(from: accumulator)!)
@@ -195,4 +234,77 @@ class CalculatorBrain {
             return pending != nil
         }
     }
+
+    var variableValues: Dictionary<String, Double> = [:] {
+        didSet {
+            rerun(program: program)
+        }
+    }
+
+    func set(operand variable: String) {
+        checkResult()
+        accumulator = variableValues[variable] ?? 0.0
+        internalProgram.append(variable as AnyObject)
+        operands.append(variable)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
