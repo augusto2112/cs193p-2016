@@ -66,7 +66,21 @@ class ViewController: UIViewController {
         }
         
         displayValue = brain.result
+        
+        if brain.errorOccurred {
+            raiseError()
+        }
         updateOperationLabel()
+    }
+    
+    fileprivate func raiseError() {
+        let alert = UIAlertController(title: "Math error",
+                                      message: "There was a problem performing the operation",
+                                      preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(OKAction)
+        self.present(alert, animated: true, completion: nil)
+        clear()
     }
     
     @IBAction func clear() {

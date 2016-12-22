@@ -125,6 +125,10 @@ class CalculatorBrain {
     }
     
     
+    var errorOccurred: Bool {
+        return result.isNaN || result.isInfinite || result.isSubnormal
+    }
+    
     fileprivate let descriptionFormatter: NumberFormatter = {
         var formatter = NumberFormatter()
         formatter.maximumFractionDigits = 6
