@@ -119,7 +119,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func saveVariable() {
-        brain.variableValues["M"] = displayValue!
+        brain.variableValues["M"] = displayValue ?? 0.0
         displayValue = brain.result
         updateOperationLabel()
         userIsInTheMiddleOfTyping = false

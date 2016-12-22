@@ -42,39 +42,88 @@ class CalculatorBrain {
     fileprivate var accumulator = 0.0
     fileprivate var pending: PendingBinaryOperationInfo?
     
-    fileprivate var operands: [String] = []
-    fileprivate var operators: [String] = []
     var description: String {
         get {
             enum CalculatorState {
                 case started
                 case firstOperandSet
                 case binaryOperationSet
+                case secondOperandSet
                 case concluded
             }
+        
             
             var state = CalculatorState.started
-            var currentProgram = internalProgram
+            var firstOperand = ""
+            var secondOperand = ""
+            var currentOperator = ""
             
-            var firstOperand: AnyObject?
-            var secondOperand: AnyObject?
-            var currentOperator: String?
             
-            for value in currentProgram {
-                if value is Double && state == .started {
-                    firstOperand = value
+            for value in internalProgram {
+                switch (state, value) {
+                case (.started, is Double), (.firstOperandSet, is Double),
+                     (.concluded, is Double):
+                    firstOperand = String(describing: value)
                     state = .firstOperandSet
-                } else if value is Double && state == .firstOperandSet {
-                    firstOperand = value
-                } else if let op = value as? String {
+                case (.binaryOperationSet, is Double), (.secondOperandSet, is Double):
+                    secondOperand = String(describing:value)
+                    state = .secondOperandSet
+                case (_, is String):
+                    let op = value as! String
                     if let operationType = operations[op] {
-                        if operationType ==
+                        switch (state, operationType) {
+                        case (.started, .constant), (.started, .independentOperation),
+                             (.firstOperandSet, .constant), (.firstOperandSet, .independentOperation),
+                             (.concluded, .constant), (.concluded, .independentOperation):
+                            firstOperand = op
+                            state = .firstOperandSet
+                        case (.firstOperandSet, .unaryOperation), (.concluded, .unaryOperation):
+                            firstOperand = op + "(" + firstOperand + ")"
+                            state = .firstOperandSet
+                        case (.firstOperandSet, .binaryOperation), (.binaryOperationSet, .binaryOperation),
+                             (.concluded, .binaryOperation):
+                            currentOperator = op
+                            state = .binaryOperationSet
+                        case (.binaryOperationSet, .constant), (.binaryOperationSet, .independentOperation),
+                             (.secondOperandSet, .constant), (.secondOperandSet, .independentOperation):
+                            secondOperand = op
+                            state = .secondOperandSet
+                        case (.binaryOperationSet, .unaryOperation), (.secondOperandSet, .unaryOperation):
+                            secondOperand = op + "(" + firstOperand + ")"
+                            state = .secondOperandSet
+                        case (.secondOperandSet, .equals):
+                            state = .concluded
+                            fallthrough
+                        case (.secondOperandSet, .binaryOperation):
+                            firstOperand = "(" + firstOperand + currentOperator + secondOperand + ")"
+                            currentOperator = op
+                        default:
+                            break
+                        }
+                    } else {
+                        switch state {
+                        case .started, .firstOperandSet, .concluded:
+                            firstOperand = op
+                            state = .firstOperandSet
+                        case .binaryOperationSet, .secondOperandSet:
+                            secondOperand = op
+                            state = .secondOperandSet
+                        }
                     }
+                default:
+                    break
                 }
+            }
+            
+            switch state {
+            case .binaryOperationSet, .secondOperandSet:
+                return firstOperand + currentOperator
+            default:
+                return firstOperand
             }
         }
     }
-    var numberTyped = false
+    
     
     fileprivate let descriptionFormatter: NumberFormatter = {
         var formatter = NumberFormatter()
@@ -125,17 +174,11 @@ class CalculatorBrain {
         accumulator = 0.0
         pending = nil
         internalProgram.removeAll()
-        numberTyped = false
-        description = ""
-        operands.removeAll()
-        operators.removeAll()
     }
     
     func set(operand: Double) {
-        numberTyped = true
         accumulator = operand
         internalProgram.append(operand as AnyObject)
-        print(internalProgram)
     }
     
     func perform(operation symbol: String){
@@ -143,77 +186,18 @@ class CalculatorBrain {
             internalProgram.append(symbol as AnyObject)
             switch operation {
             case .constant(let constant):
-                checkResult()
-                operands.append(symbol)
                 accumulator = constant
             case .independentOperation(let function):
-                checkResult()
                 accumulator = function()
-                operands.append(descriptionFormatter.string(from: accumulator)!)
             case .unaryOperation(let function):
-                parseAccumulator(symbol: symbol)
                 accumulator = function(accumulator)
             case .binaryOperation(let function):
-                parseAccumulator(symbol: symbol)
                 executePendingBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: function, firstOperand: accumulator)
             case .equals:
-                if numberTyped {
-                    operands.append(descriptionFormatter.string(from: accumulator)!)
-                }
                 executePendingBinaryOperation()
-                operators.append(symbol)
-
-            }
-            numberTyped = false
-            parseDescription()
-        }
-    }
-    
-    fileprivate func checkResult() {
-        if !isPartialResult { // this is a new operation, so clear the stack
-            operands.removeAll()
-            operators.removeAll()
-        }
-    }
-    
-    fileprivate func parseAccumulator(symbol:String) {
-        if numberTyped {
-            checkResult()
-            operands.append(descriptionFormatter.string(from: accumulator)!)
-        } else if isPartialResult {
-            operands.append(descriptionFormatter.string(from: accumulator)!)
-        }
-        operators.append(symbol)
-    }
-    
-    fileprivate func parseDescription() {
-        while !operators.isEmpty {
-            let op = operators.popLast()!
-            if let opType = operations[op], let operand = operands.popLast(){
-                switch opType {
-                case .unaryOperation:
-                    operands.append(op+"("+operand+")")
-                case .binaryOperation:
-                    if let secondOperand = operands.popLast() {
-                        operands.append("(" + secondOperand + operand + ")"+op)
-                    } else {
-                        operands.append(operand+op)
-                    }
-                case .equals:
-                    if let secondOperand = operands.popLast() {
-                        operands.append("(" + secondOperand + operand + ")")
-                    } else {
-                        operands.append(operand)
-                    }
-                default:
-                    print(op + "is not recognized as any oeprator type")
-                    exit(0)
-                }
-                description = operands.last!
             }
         }
-        
     }
     
     fileprivate func executePendingBinaryOperation() {
@@ -242,10 +226,8 @@ class CalculatorBrain {
     }
 
     func set(operand variable: String) {
-        checkResult()
         accumulator = variableValues[variable] ?? 0.0
         internalProgram.append(variable as AnyObject)
-        operands.append(variable)
     }
 }
 
