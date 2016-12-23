@@ -157,7 +157,6 @@ class CalculatorBrain {
             }
         }
         rerun(program: program)
-        print(accumulator)
     }
     
     fileprivate func rerun(program: AnyObject) {
