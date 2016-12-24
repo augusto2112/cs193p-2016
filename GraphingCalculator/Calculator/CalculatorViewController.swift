@@ -154,7 +154,7 @@ class CalculatorViewController: UIViewController {
         
         if let graphingVC = destinationVC as? GraphingViewController {
             if segue.identifier == "show graph" {
-                graphingVC.brain = self.brain
+                graphingVC.program = brain.program
             }
         }
     }

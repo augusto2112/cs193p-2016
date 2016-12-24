@@ -170,6 +170,9 @@ class CalculatorBrain {
                         perform(operation: operationOrVariable)
                     } else if variableValues[operationOrVariable] != nil{
                         set(operand: operationOrVariable)
+                    } else {
+                        variableValues[operationOrVariable] = 0
+                        set(operand: operationOrVariable)
                     }
                 }
             }
