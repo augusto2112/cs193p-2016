@@ -8,9 +8,10 @@
 
 import UIKit
 
-class CalculatorViewController: UIViewController {
+class CalculatorViewController: UIViewController, UISplitViewControllerDelegate {
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var operationLabel: UILabel!
+    @IBOutlet weak var graphButton: UIButton!
     
     fileprivate var brain = CalculatorBrain()
     
@@ -71,6 +72,20 @@ class CalculatorViewController: UIViewController {
             raiseError()
         }
         updateOperationLabel()
+        configureGraphButton()
+        
+        UserDefaults.standard.set(brain.program, forKey: "calculator program")
+        UserDefaults.standard.synchronize()
+    }
+    
+    fileprivate func configureGraphButton () {
+        if brain.isPartialResult {
+            graphButton.isEnabled = false
+            graphButton.alpha = 0.5
+        } else {
+            graphButton.isEnabled = true
+            graphButton.alpha = 1.0
+        }
     }
     
     fileprivate func raiseError() {
@@ -104,22 +119,7 @@ class CalculatorViewController: UIViewController {
             updateOperationLabel()
         }
     }
-    
-    var savedProgram: AnyObject?
-    
-    @IBAction func save() {
-        savedProgram = brain.program
-    }
-    
-    @IBAction func restore() {
-        if let program = savedProgram {
-            brain.program = program
-            displayValue = brain.result
-            updateOperationLabel()
-        }
-    }
-    
-    
+        
     func updateOperationLabel() {
         if !brain.description.isEmpty {
             if brain.isPartialResult {
@@ -158,6 +158,36 @@ class CalculatorViewController: UIViewController {
             }
         }
     }
+    
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if identifier == "show graph" {
+            return !brain.isPartialResult
+        }
+        return false
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationItem.title = "Calculator"
+        
+        if let program = UserDefaults.standard.value(forKey: "calculator program") as AnyObject? {
+            brain.program = program
+            displayValue = brain.result
+            updateOperationLabel()
+            configureGraphButton()
+        }
+        splitViewController?.delegate = self
+    }
+    
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        if UserDefaults.standard.value(forKey: GraphingViewController.keyForUserDefaults) == nil { // does this violate mvc?
+            return true
+        } else {
+            return false
+        }
+    }
+
     
 }
 

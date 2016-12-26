@@ -13,15 +13,35 @@ protocol GraphingViewDelegate: class {
     func needYAt(x: CGFloat) -> CGFloat
 }
 
-class GraphingView: UIView {
+@IBDesignable class GraphingView: UIView {
     let axesDrawer = AxesDrawer()
-    private var pointsPerUnit: CGFloat = 1
-    private var origin = CGPoint.zero
+    @IBInspectable var pointsPerUnit: CGFloat = 1 {
+        didSet {
+            UserDefaults.standard.set(Double(pointsPerUnit), forKey: "pointsPerUnit")
+        }
+    }
+    var origin = CGPoint(x:UIScreen.main.bounds.midX, y: UIScreen.main.bounds.midX) {
+        didSet {
+            UserDefaults.standard.set(Double(origin.x), forKey: "xOrigin")
+            UserDefaults.standard.set(Double(origin.y), forKey: "yOrigin")
+            
+        }
+    }
     weak var delegate: GraphingViewDelegate?
     
     func setup() {
         axesDrawer.contentScaleFactor = contentScaleFactor
-        origin = CGPoint(x: frame.midX, y: frame.midY)
+        
+        let defaults = UserDefaults.standard
+        if let xOrigin = defaults.object(forKey: "xOrigin") as? Double,
+            let yOrigin = defaults.object(forKey: "yOrigin") as? Double,
+            let points = defaults.object(forKey: "pointsPerUnit") as? Double {
+            origin = CGPoint(x: xOrigin, y: yOrigin)
+            pointsPerUnit = CGFloat(points)
+        } else {
+            origin = CGPoint(x: bounds.width/2, y: bounds.height/2)
+        }
+        
         
         let pinchRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(GraphingView.rescale(_:)))
         addGestureRecognizer(pinchRecognizer)
@@ -35,8 +55,6 @@ class GraphingView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        // Drawing code
-        
         axesDrawer.drawAxesInRect(bounds: frame,
                                   origin: origin,
                                   pointsPerUnit: pointsPerUnit)
@@ -47,17 +65,28 @@ class GraphingView: UIView {
         let firstX = -origin.x / pointsPerUnit
         let lastX = frame.size.width / pointsPerUnit - origin.x / pointsPerUnit
         let step = (lastX - firstX) / frame.size.width
+        var path = UIBezierPath()
+        var moved = false
         
-        let firstY = delegate?.needYAt(x: firstX) ?? 0.0
-        let path = UIBezierPath()
-        path.move(to: convertToFrame(from: CGPoint(x: firstX, y: firstY)))
-        
-        for x in stride(from: firstX + step, to: lastX, by: step) {
-            let y = delegate?.needYAt(x: x) ?? 0.0
-            path.addLine(to: convertToFrame(from: CGPoint(x: x, y: y)))
+        for x in stride(from: firstX, to: lastX, by: step) {
+            if let y = delegate?.needYAt(x: x) {
+                if moved && (y.isZero || y.isNormal) {
+                    path.addLine(to: convertToFrame(from: CGPoint(x: x, y: y)))
+                } else if !moved && (y.isZero || y.isNormal) {
+                    path.move(to: convertToFrame(from: CGPoint(x: x, y: y)))
+                    moved = true
+                } else if !y.isZero || !y.isNormal {
+                    UIColor.blue.set()
+                    path.lineWidth = 3.0
+                    path.stroke()
+                    path = UIBezierPath()
+                    moved = false
+                }
+            }
         }
+        
         UIColor.blue.set()
-        path.lineWidth = 1.0
+        path.lineWidth = 3.0
         path.stroke()
     }
 
@@ -111,5 +140,6 @@ class GraphingView: UIView {
             break
         }
     }
+
     
 }

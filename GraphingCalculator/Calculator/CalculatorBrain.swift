@@ -23,7 +23,7 @@ fileprivate enum Operation {
 }
 
 fileprivate let operations: Dictionary<String, Operation> = [
-    "π": Operation.constant(M_PI),
+    "π": Operation.constant(.pi),
     "e": Operation.constant(M_E),
     "🎲": Operation.independentOperation({return Double(arc4random()) / Double(UInt32.max)}),
     "√": Operation.unaryOperation(sqrt),
