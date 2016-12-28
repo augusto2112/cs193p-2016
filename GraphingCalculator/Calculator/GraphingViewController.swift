@@ -15,7 +15,6 @@ class GraphingViewController: UIViewController, GraphingViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let defaults = UserDefaults.standard
 
         if program != nil {
