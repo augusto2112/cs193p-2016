@@ -16,7 +16,7 @@ class ImageTableViewCell: UITableViewCell {
         didSet {
             // for SOME reason, the new image that is loaded doesn't respect aspect fit,
             // unless I put a placeholder image in it's place
-            pictureView.image = UIImage()
+//            pictureView.image = UIImage()
             fetchImage()
         }
     }
