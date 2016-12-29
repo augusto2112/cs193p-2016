@@ -118,15 +118,15 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
+        searchText = "#sushi" // trump has a lot of mentions, links and hashtags, so hes good for testing
     }
 
-    /*
-    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "show tweet detail" {
+            if let vc = segue.destination as? TweetDetailTableViewController, let cell = sender as? TweetTableViewCell {
+                vc.tweet = cell.tweet
+            }
+        }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
-    */
 }

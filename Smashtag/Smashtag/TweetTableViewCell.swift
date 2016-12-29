@@ -33,21 +33,28 @@ class TweetTableViewCell: UITableViewCell
         // load new information from our tweet (if any)
         if let tweet = self.tweet
         {
-            tweetTextLabel?.text = tweet.text
-            if tweetTextLabel?.text != nil  {
+            tweetTextLabel?.attributedText = generateTextFrom(tweet: tweet)
+            if tweetTextLabel?.attributedText != nil  {
                 for _ in tweet.media {
-                    tweetTextLabel.text! += " 📷"
+                    let temp = NSMutableAttributedString(attributedString: tweetTextLabel.attributedText!)
+                    temp.append(NSAttributedString(string:(" 📷")))
+                    tweetTextLabel.attributedText = temp
                 }
             }
             
             tweetScreenNameLabel?.text = "\(tweet.user)" // tweet.user.description
             
             if let profileImageURL = tweet.user.profileImageURL {
-                do {
-                    let imageData = try Data(contentsOf: profileImageURL) // blocks main thread!
-                    tweetProfileImageView?.image = UIImage(data: imageData)
-                } catch let exception {
-                    fatalError(exception.localizedDescription)
+                let queue = DispatchQueue(label: "profile image fetcher", qos: .userInitiated)
+                queue.async { [weak weakSelf = self] in
+                    do {
+                        let imageData = try Data(contentsOf: profileImageURL) // blocks main thread!
+                        DispatchQueue.main.async {
+                            weakSelf?.tweetProfileImageView?.image = UIImage(data: imageData)
+                        }
+                    } catch let exception {
+                        fatalError("this error " + exception.localizedDescription)
+                    }
                 }
             }
             
@@ -62,4 +69,50 @@ class TweetTableViewCell: UITableViewCell
 
     }
     
+    fileprivate func generateTextFrom(tweet: Tweet) -> NSAttributedString {
+        let attributedText = NSMutableAttributedString(string: tweet.text)
+        for mention in tweet.userMentions {
+            attributedText.addAttribute(NSForegroundColorAttributeName, value: UIColor.green, range: mention.nsrange)
+            attributedText.addAttribute(NSFontAttributeName, value: UIFont(name: "Chalkduster", size: tweetTextLabel.font.pointSize)!, range: mention.nsrange) // Im a UI designer now LOL
+        }
+        for hashtag in tweet.hashtags {
+            attributedText.addAttribute(NSForegroundColorAttributeName, value: UIColor.red, range: hashtag.nsrange)
+            attributedText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.green, range: hashtag.nsrange)
+        }
+        for url in tweet.urls {
+            attributedText.addAttribute(NSForegroundColorAttributeName, value: UIColor.blue, range: url.nsrange)
+            attributedText.addAttribute(NSBackgroundColorAttributeName, value: UIColor.orange, range: url.nsrange)
+        }
+        return attributedText
+    }
+    
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
