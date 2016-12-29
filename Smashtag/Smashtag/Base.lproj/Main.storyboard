@@ -127,14 +127,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="imageCell" rowHeight="235" id="i0J-po-6ww" customClass="ImageTableViewCell" customModule="Smashtag" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleAspectFit" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="imageCell" rowHeight="235" id="i0J-po-6ww" customClass="ImageTableViewCell" customModule="Smashtag" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="235"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="i0J-po-6ww" id="H2d-7o-AkA">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="234.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="234"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-o4-kqg">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HFj-o4-kqg">
                                             <rect key="frame" x="8" y="8" width="359" height="218.5"/>
                                         </imageView>
                                     </subviews>
@@ -148,6 +148,7 @@
                                 <connections>
                                     <outlet property="imageView" destination="HFj-o4-kqg" id="tjp-RJ-0nF"/>
                                     <outlet property="pictureView" destination="HFj-o4-kqg" id="zYy-oZ-TLR"/>
+                                    <segue destination="EVU-g8-BnF" kind="show" identifier="show image" id="TNS-Tr-Hgj"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="mentionCell" textLabel="Ol9-Au-gab" rowHeight="51" style="IBUITableViewCellStyleDefault" id="pkz-wL-bdq">
@@ -181,6 +182,38 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p8m-pr-hLL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1829.5999999999999" y="264.91754122938534"/>
+        </scene>
+        <!--Image View Controller-->
+        <scene sceneID="w9t-5J-MCa">
+            <objects>
+                <viewController id="EVU-g8-BnF" customClass="ImageViewController" customModule="Smashtag" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="5d0-8B-T2d"/>
+                        <viewControllerLayoutGuide type="bottom" id="VGO-Ng-ySN"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="h5y-MG-FEM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tft-Xk-lBu">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Tft-Xk-lBu" firstAttribute="leading" secondItem="h5y-MG-FEM" secondAttribute="leading" id="Brb-XJ-wHN"/>
+                            <constraint firstItem="Tft-Xk-lBu" firstAttribute="top" secondItem="5d0-8B-T2d" secondAttribute="bottom" id="fHt-gr-2LO"/>
+                            <constraint firstAttribute="trailing" secondItem="Tft-Xk-lBu" secondAttribute="trailing" id="rWu-4O-0RN"/>
+                            <constraint firstItem="Tft-Xk-lBu" firstAttribute="bottom" secondItem="VGO-Ng-ySN" secondAttribute="top" id="ySk-Jk-gay"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="scrollView" destination="Tft-Xk-lBu" id="6D2-dl-FlI"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RTZ-1n-YGG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2581.5999999999999" y="263.11844077961024"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wd5-L1-fYW">

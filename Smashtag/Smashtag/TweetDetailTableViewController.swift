@@ -41,8 +41,9 @@ class TweetDetailTableViewController: UITableViewController {
         case 0:
             cell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath)
             if let imageCell = cell as? ImageTableViewCell {
-                imageCell.pictureView.contentMode = .scaleAspectFit
                 imageCell.pictureURL = tweet?.media[indexPath.row].url
+
+                
             }
         case 1, 2, 3:
             cell = tableView.dequeueReusableCell(withIdentifier: "mentionCell", for: indexPath)
@@ -77,8 +78,6 @@ class TweetDetailTableViewController: UITableViewController {
         if tweet != nil {
             mapping = [0: tweet!.media, 1: tweet!.userMentions, 2: tweet!.hashtags, 3: tweet!.urls]
             sectionTitles.append(contentsOf: ["Media", "Mentions", "Hashtags", "URLs"])
-            print("here??")
-
         }
     }
     
@@ -88,6 +87,10 @@ class TweetDetailTableViewController: UITableViewController {
             if let vc = segue.destination as? TweetTableViewController, let cell = sender as? UITableViewCell {
                 let index = tableView.indexPath(for: cell)
                 vc.searchText = mapping[index!.section]![index!.row].keyword
+            }
+        } else if segue.identifier == "show image" {
+            if let vc = segue.destination as? ImageViewController, let cell = sender as? ImageTableViewCell {
+                vc.image = cell.pictureView.image
             }
         }
     }
