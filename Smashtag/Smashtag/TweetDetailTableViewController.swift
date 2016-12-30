@@ -16,6 +16,15 @@ class TweetDetailTableViewController: UITableViewController {
     
     fileprivate var sectionTitles = [String]()
     
+    // MARK: - Constants
+    
+    fileprivate struct Storyboard {
+        static let imageCellIdentifier = "imageCell"
+        static let mentionCellIdentifier = "mentionCell"
+        static let tweetTableViewControllerIdentifier = "show more"
+        static let imageViewControllerIdentifier = "show image"
+    }
+    
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -30,6 +39,7 @@ class TweetDetailTableViewController: UITableViewController {
         return mapping[section]?.count ?? 0
     }
     
+
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
@@ -39,14 +49,12 @@ class TweetDetailTableViewController: UITableViewController {
         }
         switch indexPath.section {
         case 0:
-            cell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.imageCellIdentifier, for: indexPath)
             if let imageCell = cell as? ImageTableViewCell {
                 imageCell.pictureURL = tweet?.media[indexPath.row].url
-
-                
             }
         case 1, 2, 3:
-            cell = tableView.dequeueReusableCell(withIdentifier: "mentionCell", for: indexPath)
+            cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.mentionCellIdentifier, for: indexPath)
             cell.textLabel?.text = mapping[indexPath.section]![indexPath.row].keyword
         default:
             fatalError("Cell has to be one of the above")
@@ -81,14 +89,15 @@ class TweetDetailTableViewController: UITableViewController {
         }
     }
     
+    
     // MARK: - Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "show more" {
+        if segue.identifier == Storyboard.tweetTableViewControllerIdentifier {
             if let vc = segue.destination as? TweetTableViewController, let cell = sender as? UITableViewCell {
                 let index = tableView.indexPath(for: cell)
                 vc.searchText = mapping[index!.section]![index!.row].keyword
             }
-        } else if segue.identifier == "show image" {
+        } else if segue.identifier == Storyboard.imageViewControllerIdentifier {
             if let vc = segue.destination as? ImageViewController, let cell = sender as? ImageTableViewCell {
                 vc.image = cell.pictureView.image
             }

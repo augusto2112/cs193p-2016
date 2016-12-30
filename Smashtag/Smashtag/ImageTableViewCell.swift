@@ -20,7 +20,7 @@ class ImageTableViewCell: UITableViewCell {
     
     fileprivate func fetchImage() {
         if let url = pictureURL {
-            //            pictureView.image = nil
+            pictureView.image = nil
             let queue = DispatchQueue(label: "image fetcher", qos: .userInitiated)
             queue.async { [weak weakSelf = self] in
                 do {

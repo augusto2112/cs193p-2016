@@ -8,14 +8,13 @@
 
 import UIKit
 
-class ImageViewController: UIViewController, UIScrollViewDelegate
-{
+class ImageViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView! {
         didSet {
             scrollView.contentSize = imageView.frame.size
             scrollView.delegate = self
             scrollView.minimumZoomScale = 0.03
-            scrollView.maximumZoomScale = 1.0
+            scrollView.maximumZoomScale = 100.0
         }
     }
     
@@ -45,6 +44,28 @@ class ImageViewController: UIViewController, UIScrollViewDelegate
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+//        if let imageSize = image?.size {
+//            let scale = max(scrollView.frame.width / imageSize.width, scrollView.frame.height / imageSize.height)
+//            scrollView.setZoomScale(scale, animated: true)
+//        }
+        
         scrollView.zoom(to: CGRect(origin: CGPoint.zero, size: imageView.bounds.size) , animated: true)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

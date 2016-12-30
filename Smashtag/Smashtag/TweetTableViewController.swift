@@ -15,6 +15,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
 
     var tweets = [Array<Twitter.Tweet>]() {
         didSet {
+        
             tableView.reloadData()
         }
     }
@@ -25,6 +26,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
             lastTwitterRequest = nil
             searchForTweets()
             title = searchText
+            SearchManager.addToRecentlySearched(search: searchText!)
         }
     }
     
@@ -118,7 +120,6 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
         super.viewDidLoad()
         tableView.estimatedRowHeight = tableView.rowHeight
         tableView.rowHeight = UITableViewAutomaticDimension
-        searchText = "#sushi" // trump has a lot of mentions, links and hashtags, so hes good for testing
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
