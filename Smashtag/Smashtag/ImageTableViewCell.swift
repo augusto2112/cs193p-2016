@@ -14,9 +14,6 @@ class ImageTableViewCell: UITableViewCell {
     
     var pictureURL: URL? {
         didSet {
-            // for SOME reason, the new image that is loaded doesn't respect aspect fit,
-            // unless I put a placeholder image in it's place
-//            pictureView.image = UIImage()
             fetchImage()
         }
     }
@@ -32,7 +29,6 @@ class ImageTableViewCell: UITableViewCell {
                     DispatchQueue.main.async {
                         if url == self.pictureURL {
                             weakSelf?.pictureView.image = image
-                            print("loaded")
                         }
                     }
                 } catch let exception {
