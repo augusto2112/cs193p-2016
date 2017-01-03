@@ -29,7 +29,7 @@
                                 <rect key="frame" x="0.0" y="58" width="375" height="154"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="k1M-Tv-biK" id="EYs-gE-X6M">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="154"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="153.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="PyJ-y5-pCT">
@@ -131,7 +131,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="186"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="l1k-az-OIN" id="fLj-ab-noR">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="186"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="185.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YnC-1w-96E">
@@ -154,7 +154,7 @@
                                 <rect key="frame" x="0.0" y="214" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3wp-Xi-8I3" id="2J9-hh-Smv">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>

@@ -10,11 +10,8 @@ import UIKit
 import Twitter
 
 class TweetDetailTableViewController: UITableViewController {
-    var tweet: Tweet?
     
-    fileprivate var mapping = [Int: [AnyObject]]()
-    
-    fileprivate var sectionTitles = [String]()
+    fileprivate var tweetData = [Int: (title: String, data: [AnyObject])]()
     
     // MARK: - Constants
     
@@ -25,77 +22,82 @@ class TweetDetailTableViewController: UITableViewController {
         static let imageViewControllerIdentifier = "show image"
     }
     
+    fileprivate struct Section {
+        static let media = 0
+        static let mentions = 1
+        static let hashtags = 2
+        static let urls = 3
+    }
+    
+    
+    
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return sectionTitles.count
+        return tweetData.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return !(mapping[section] ?? []).isEmpty ? sectionTitles[section] : nil
+        return !(tweetData[section]?.data ?? []).isEmpty ? tweetData[section]!.title : nil
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mapping[section]?.count ?? 0
+        return tweetData[section]?.data.count ?? 0
     }
-    
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = UITableViewCell()
         
-        guard tweet != nil else {
-            return cell
-        }
         switch indexPath.section {
-        case 0:
+        case Section.media:
             cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.imageCellIdentifier, for: indexPath)
             if let imageCell = cell as? ImageTableViewCell {
-                imageCell.pictureURL = tweet?.media[indexPath.row].url
+                imageCell.pictureURL = (tweetData[indexPath.section]!.data[indexPath.row] as! MediaItem).url
             }
-        case 1, 2, 3:
+        case Section.mentions, Section.hashtags, Section.urls:
             cell = tableView.dequeueReusableCell(withIdentifier: Storyboard.mentionCellIdentifier, for: indexPath)
-            cell.textLabel?.text = mapping[indexPath.section]![indexPath.row].keyword
+            cell.textLabel?.text = tweetData[indexPath.section]!.data[indexPath.row].keyword
         default:
             fatalError("Cell has to be one of the above")
         }
         return cell
     }
     
+    // MARK: - Table view delegate
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 && tweet != nil {
-            let media = tweet?.media[indexPath.row]
-            return tableView.frame.width / CGFloat(media!.aspectRatio)
+        if indexPath.section == Section.media {
+            let media = tweetData[indexPath.section]!.data[indexPath.row]
+            return tableView.frame.width / CGFloat(media.aspectRatio)
         }
         return UITableViewAutomaticDimension
     }
     
-    // MARK: - Table view delegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 3 && tweet != nil {
-            let url = URL(string: mapping[indexPath.section]![indexPath.row].keyword!)
+        if indexPath.section == Section.urls {
+            let url = URL(string: tweetData[indexPath.section]!.data[indexPath.row].keyword!)
             if url != nil && UIApplication.shared.canOpenURL(url!) {
                 UIApplication.shared.open(url!, options: [:], completionHandler: nil)
             }
         }
     }
     
-    // MARK: - Life cycle
+    // MARK: - Setup
     
-    override func viewDidLoad() {
-        if tweet != nil {
-            mapping = [0: tweet!.media, 1: tweet!.userMentions, 2: tweet!.hashtags, 3: tweet!.urls]
-            sectionTitles.append(contentsOf: ["Media", "Mentions", "Hashtags", "URLs"])
-        }
+    func setup(tweet: Tweet) {
+        tweetData = [Section.media: ("Media", tweet.media),
+                     Section.mentions: ("Mentions", tweet.userMentions),
+                     Section.hashtags: ("Hashtags", tweet.hashtags),
+                     Section.urls: ("URLs", tweet.urls)]
     }
     
-    
     // MARK: - Segue
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == Storyboard.tweetTableViewControllerIdentifier {
             if let vc = segue.destination as? TweetTableViewController, let cell = sender as? UITableViewCell {
                 let index = tableView.indexPath(for: cell)
-                vc.searchText = mapping[index!.section]![index!.row].keyword
+                vc.searchText = tweetData[index!.section]!.data[index!.row].keyword
             }
         } else if segue.identifier == Storyboard.imageViewControllerIdentifier {
             if let vc = segue.destination as? ImageViewController, let cell = sender as? ImageTableViewCell {
@@ -107,13 +109,13 @@ class TweetDetailTableViewController: UITableViewController {
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
         if let cell = sender as? UITableViewCell {
             let index = tableView.indexPath(for: cell)
-            if index?.section == 3 {
+            if index?.section == Section.urls {
                 return false
             }
         }
         return true
     }
-
+    
 }
 
 

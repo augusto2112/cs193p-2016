@@ -52,4 +52,16 @@ class SearchManager {
             }
         }
     }
+    
+    class func moveObject(from: Int, to: Int) {
+        var searches = getSearches()
+        let element = searches.remove(at: from)
+        searches.insert(element, at: to)
+        defaults.set(searches, forKey: tweetSearches)
+        defaults.synchronize()
+    }
+    
+    class func isValid(index: Int) -> Bool {
+        return getSearches().count > index
+    }
 }

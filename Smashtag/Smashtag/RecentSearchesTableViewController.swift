@@ -31,6 +31,10 @@ class RecentSearchesTableViewController: UITableViewController {
     
     // MARK: - Lifecycle
     
+    override func viewDidLoad() {
+        navigationItem.leftBarButtonItem = editButtonItem
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadSearches()
@@ -64,21 +68,16 @@ class RecentSearchesTableViewController: UITableViewController {
             reloadSearches()
         }
     }
-
-    /*
-    // Override to support rearranging the table view.
+    
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+        SearchManager.moveObject(from: fromIndexPath.row, to: to.row)
     }
-    */
 
-    /*
-    // Override to support conditional rearranging of the table view.
+    
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the item to be re-orderable.
-        return true
+        return SearchManager.isValid(index: indexPath.row)
     }
-    */
 
     // MARK: - Navigation
 
