@@ -2,7 +2,7 @@
 //  LocalMention+CoreDataProperties.swift
 //  Smashtag
 //
-//  Created by Augusto on 1/4/17.
+//  Created by Augusto on 1/5/17.
 //  Copyright © 2017 Stanford University. All rights reserved.
 //
 
@@ -17,6 +17,7 @@ extension LocalMention {
     }
 
     @NSManaged public var text: String?
+    @NSManaged public var numberOfMentions: Int64
     @NSManaged public var tweets: NSSet?
 
 }

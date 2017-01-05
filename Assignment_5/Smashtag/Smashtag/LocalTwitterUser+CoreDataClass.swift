@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import Twitter
 
-public class LocalTwitterUser: NSManagedObject {
+open class LocalTwitterUser: NSManagedObject {
     class func tweeterUserWithTwitterInfo(_ twitterInfo: User,
                                     inManagedObjectContext context: NSManagedObjectContext) -> LocalTwitterUser? {
         let request = NSFetchRequest<LocalTwitterUser>.init(entityName: "LocalTwitterUser")

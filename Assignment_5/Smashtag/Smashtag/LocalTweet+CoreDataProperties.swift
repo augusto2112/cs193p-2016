@@ -12,8 +12,8 @@ import CoreData
 
 extension LocalTweet {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<LocalTweet> {
-        return NSFetchRequest<LocalTweet>(entityName: "LocalTweet");
+    @nonobjc open override class func fetchRequest() -> NSFetchRequest<NSFetchRequestResult> {
+        return NSFetchRequest<LocalTweet>(entityName: "LocalTweet") as! NSFetchRequest<NSFetchRequestResult>;
     }
 
     @NSManaged public var unique: String?

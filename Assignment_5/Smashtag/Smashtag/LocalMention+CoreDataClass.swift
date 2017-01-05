@@ -10,27 +10,29 @@ import Foundation
 import CoreData
 import Twitter
 
-public class LocalMention: NSManagedObject {
-    class func mentionFrom(mention: Mention,
+open class LocalMention: NSManagedObject {
+    class func mentionFrom(_ mention: Mention,
                                     inManagedObjectContext context: NSManagedObjectContext) -> LocalMention? {
         let request = NSFetchRequest<LocalMention>.init(entityName: "LocalMention")
         request.predicate = NSPredicate(format: "text MATCHES [c]%@", mention.keyword)
         
         if let localMention = (try? context.fetch(request))?.first {
+            localMention.numberOfMentions += 1
             return localMention
         } else if let localMention = NSEntityDescription.insertNewObject(forEntityName: "LocalMention", into: context) as? LocalMention {
             localMention.text = mention.keyword
+            localMention.numberOfMentions = 1
             return localMention
         }
         
         return nil
     }
 
-    class func mentionsFrom(twitterInfo: Tweet,
+    class func mentionsFrom(_ twitterInfo: Tweet,
                            inManagedObjectContext context: NSManagedObjectContext) -> NSSet {
         var localMentions = Set<LocalMention>()
         for mention in twitterInfo.hashtags + twitterInfo.userMentions {
-            if let localMention = mentionFrom(mention: mention, inManagedObjectContext: context) {
+            if let localMention = mentionFrom(mention, inManagedObjectContext: context) {
                 localMentions.insert(localMention)
             }
         }

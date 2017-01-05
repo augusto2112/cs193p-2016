@@ -13,6 +13,8 @@
 		14779BBC1E16802E00987B07 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14779BBB1E16802E00987B07 /* Constants.swift */; };
 		14779BC01E16867B00987B07 /* RecentSearchesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14779BBF1E16867B00987B07 /* RecentSearchesTableViewController.swift */; };
 		14879BB61E140FE000755DD5 /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14879BB51E140FE000755DD5 /* ImageTableViewCell.swift */; };
+		1492B8EE1E1E9EC700241293 /* CoreDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1492B8ED1E1E9EC700241293 /* CoreDataTableViewController.swift */; };
+		1492B8F01E1E9FA200241293 /* MentionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1492B8EF1E1E9FA200241293 /* MentionsTableViewController.swift */; };
 		14BF73221E169A77008412D2 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BF73211E169A77008412D2 /* SearchManager.swift */; };
 		14C6BE8A1E15765F003E346F /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C6BE891E15765F003E346F /* ImageViewController.swift */; };
 		14C6BE8E1E157C49003E346F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14C6BE8D1E157C49003E346F /* Extensions.swift */; };
@@ -51,6 +53,8 @@
 		14779BBB1E16802E00987B07 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		14779BBF1E16867B00987B07 /* RecentSearchesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentSearchesTableViewController.swift; sourceTree = "<group>"; };
 		14879BB51E140FE000755DD5 /* ImageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
+		1492B8ED1E1E9EC700241293 /* CoreDataTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataTableViewController.swift; sourceTree = "<group>"; };
+		1492B8EF1E1E9FA200241293 /* MentionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MentionsTableViewController.swift; sourceTree = "<group>"; };
 		14BF73211E169A77008412D2 /* SearchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 		14C6BE891E15765F003E346F /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		14C6BE8D1E157C49003E346F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -92,6 +96,7 @@
 				14D71AF01E1D5896008DF4D4 /* LocalTwitterUser+CoreDataProperties.swift */,
 				14D71AF11E1D5896008DF4D4 /* LocalMention+CoreDataClass.swift */,
 				14D71AF21E1D5896008DF4D4 /* LocalMention+CoreDataProperties.swift */,
+				1492B8ED1E1E9EC700241293 /* CoreDataTableViewController.swift */,
 				14D71AEA1E1D5718008DF4D4 /* Model.xcdatamodeld */,
 			);
 			name = "Core Data";
@@ -124,6 +129,7 @@
 				14879BB51E140FE000755DD5 /* ImageTableViewCell.swift */,
 				14C6BE891E15765F003E346F /* ImageViewController.swift */,
 				14779BBF1E16867B00987B07 /* RecentSearchesTableViewController.swift */,
+				1492B8EF1E1E9FA200241293 /* MentionsTableViewController.swift */,
 				14BF73211E169A77008412D2 /* SearchManager.swift */,
 				14C6BE8D1E157C49003E346F /* Extensions.swift */,
 				14779BBB1E16802E00987B07 /* Constants.swift */,
@@ -226,6 +232,8 @@
 				14C6BE8A1E15765F003E346F /* ImageViewController.swift in Sources */,
 				14879BB61E140FE000755DD5 /* ImageTableViewCell.swift in Sources */,
 				146C03401E13FC4100EE60E4 /* TweetDetailTableViewController.swift in Sources */,
+				1492B8EE1E1E9EC700241293 /* CoreDataTableViewController.swift in Sources */,
+				1492B8F01E1E9FA200241293 /* MentionsTableViewController.swift in Sources */,
 				14D71AF71E1D5896008DF4D4 /* LocalMention+CoreDataClass.swift in Sources */,
 				ECB7139F1CCEEE5B00DB951A /* TweetTableViewCell.swift in Sources */,
 				14C6BE8E1E157C49003E346F /* Extensions.swift in Sources */,

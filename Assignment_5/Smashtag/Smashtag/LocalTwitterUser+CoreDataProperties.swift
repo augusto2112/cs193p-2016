@@ -12,8 +12,8 @@ import CoreData
 
 extension LocalTwitterUser {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<LocalTwitterUser> {
-        return NSFetchRequest<LocalTwitterUser>(entityName: "LocalTwitterUser");
+    @nonobjc open override class func fetchRequest() -> NSFetchRequest<NSFetchRequestResult> {
+        return NSFetchRequest<LocalTwitterUser>(entityName: "LocalTwitterUser") as! NSFetchRequest<NSFetchRequestResult>;
     }
 
     @NSManaged public var name: String?

@@ -17,6 +17,7 @@ class RecentSearchesTableViewController: UITableViewController {
     fileprivate struct Storyboard {
         static let searchCell = "searchCell"
         static let searchSegue = "search"
+        static let mentionsSegue = "showMentions"
     }
     
     fileprivate func reloadSearches() {
@@ -30,6 +31,7 @@ class RecentSearchesTableViewController: UITableViewController {
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         navigationItem.leftBarButtonItem = editButtonItem
     }
     
@@ -83,6 +85,10 @@ class RecentSearchesTableViewController: UITableViewController {
         if segue.identifier == Storyboard.searchSegue {
             if let vc = segue.destination as? TweetTableViewController, let cell = sender as? UITableViewCell {
                 vc.searchText = cell.textLabel?.text
+            }
+        } else if segue.identifier == Storyboard.mentionsSegue {
+            if let vc = segue.destination as? MentionsTableViewController, let cell = sender as? UITableViewCell {
+                vc.searchTerm = cell.textLabel?.text
             }
         }
     }

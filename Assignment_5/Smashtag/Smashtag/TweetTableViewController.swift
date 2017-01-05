@@ -145,7 +145,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
             }
             try? self.managedObjectContext?.save()
         }
-        printDatabaseStatistics()
+//        printDatabaseStatistics()
     }
     
     fileprivate func printDatabaseStatistics() {
@@ -162,26 +162,16 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
             }
             
             let request = NSFetchRequest<LocalMention>(entityName: "LocalMention")
-            request.predicate = NSPredicate(format: "text MATCHES [c] %@", "#trump")
-            
-            if let mention = try? self.managedObjectContext!.fetch(request).first {
-                
-                for tweet in mention!.tweets! {
-                    print((tweet as! LocalTweet).text)
+            request.sortDescriptors = [NSSortDescriptor(
+                key: "numberOfMentions",
+                ascending: false)
+            ]
+            if let mentions = try? self.managedObjectContext!.fetch(request) {
+                for mention in mentions {
+                    print("\(mention.text) has this many mentions: \(mention.numberOfMentions)")
                 }
-                print("Count: \(mention!.tweets!.count)")
             }
-            
-            let request2 = NSFetchRequest<LocalMention>(entityName: "LocalMention")
-            request2.predicate = NSPredicate(format: "!(text MATCHES [c] %@)", "#trump")
-            
-            if let mention = try? self.managedObjectContext!.fetch(request2).first {
-                
-                for tweet in mention!.tweets! {
-                    print((tweet as! LocalTweet).text)
-                }
-                print("Count: \(mention!.tweets!.count)")
-            }
+
 
 
 //            if let results = try? self.managedObjectContext!.fetch(NSFetchRequest(entityName: "LocalTweet")) {
