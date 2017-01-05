@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G31" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="LocalMention" representedClassName=".LocalMention" syncable="YES">
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="tweets" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LocalTweet" inverseName="mentions" inverseEntity="LocalTweet" syncable="YES"/>
+    </entity>
+    <entity name="LocalTweet" representedClassName=".LocalTweet" syncable="YES">
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unique" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="mentions" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="LocalMention" inverseName="tweets" inverseEntity="LocalMention" syncable="YES"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LocalTwitterUser" inverseName="tweets" inverseEntity="LocalTwitterUser" syncable="YES"/>
+    </entity>
+    <entity name="LocalTwitterUser" representedClassName=".LocalTwitterUser" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="screenName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="tweets" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="LocalTweet" inverseName="user" inverseEntity="LocalTweet" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="LocalTweet" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="LocalTwitterUser" positionX="34" positionY="182" width="128" height="88"/>
+        <element name="LocalMention" positionX="151" positionY="30" width="128" height="73"/>
+    </elements>
+</model>

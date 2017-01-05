@@ -8,10 +8,14 @@
 
 import UIKit
 import Twitter
+import CoreData
 
-class TweetTableViewController: UITableViewController, UITextFieldDelegate
-{
+class TweetTableViewController: UITableViewController, UITextFieldDelegate {
     // MARK: Model
+    
+    var managedObjectContext: NSManagedObjectContext? =
+        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+
 
     var tweets = [Array<Twitter.Tweet>]() {
         didSet {
@@ -52,6 +56,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
                     if request == weakSelf?.lastTwitterRequest {
                         if !newTweets.isEmpty {
                             weakSelf?.tweets.insert(newTweets, at: 0)
+                            weakSelf?.updateDatabase(newTweets)
                         }
                     }
                     weakSelf?.refreshControl?.endRefreshing()
@@ -130,4 +135,98 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate
         }
 
     }
+    
+    // MARK: Core data
+    
+    fileprivate func updateDatabase(_ newTweets: [Tweet]) {
+        managedObjectContext?.perform {
+            for twitterInfo in newTweets {
+                _ = LocalTweet.tweetWithTwitterInfo(twitterInfo, inManagedObjectContext: self.managedObjectContext!)
+            }
+            try? self.managedObjectContext?.save()
+        }
+        printDatabaseStatistics()
+    }
+    
+    fileprivate func printDatabaseStatistics() {
+        managedObjectContext?.perform {
+            if let results = try? self.managedObjectContext!.fetch(NSFetchRequest(entityName: "LocalTwitterUser")) {
+                print("\(results.count) TwitterUsers")
+            }
+            // a more efficient way to count objects ...
+            if let tweetCount = try? self.managedObjectContext!.count(for: NSFetchRequest(entityName: "LocalTweet")) {
+                print("\(tweetCount) Tweets")
+            }
+            if let mentions = try? self.managedObjectContext!.count(for: NSFetchRequest(entityName: "LocalMention")) {
+                print("\(mentions) Mentions")
+            }
+            
+            let request = NSFetchRequest<LocalMention>(entityName: "LocalMention")
+            request.predicate = NSPredicate(format: "text MATCHES [c] %@", "#trump")
+            
+            if let mention = try? self.managedObjectContext!.fetch(request).first {
+                
+                for tweet in mention!.tweets! {
+                    print((tweet as! LocalTweet).text)
+                }
+                print("Count: \(mention!.tweets!.count)")
+            }
+            
+            let request2 = NSFetchRequest<LocalMention>(entityName: "LocalMention")
+            request2.predicate = NSPredicate(format: "!(text MATCHES [c] %@)", "#trump")
+            
+            if let mention = try? self.managedObjectContext!.fetch(request2).first {
+                
+                for tweet in mention!.tweets! {
+                    print((tweet as! LocalTweet).text)
+                }
+                print("Count: \(mention!.tweets!.count)")
+            }
+
+
+//            if let results = try? self.managedObjectContext!.fetch(NSFetchRequest(entityName: "LocalTweet")) {
+//                for tweet in (results as? [LocalTweet])! {
+//                    for mention in Array(tweet.mentions!) as! [LocalMention] {
+//                        print(mention.text)
+//                    }
+//                }
+//            }
+        }
+    }
+
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
