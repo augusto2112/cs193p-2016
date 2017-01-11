@@ -9,12 +9,10 @@
 import UIKit
 import Twitter
 import CoreData
-
 class TweetTableViewController: UITableViewController, UITextFieldDelegate {
     // MARK: Model
     
-    var managedObjectContext: NSManagedObjectContext? =
-        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+    var managedObjectContext = Context.getContext()
 
 
     var tweets = [Array<Twitter.Tweet>]() {
@@ -145,7 +143,7 @@ class TweetTableViewController: UITableViewController, UITextFieldDelegate {
             }
             try? self.managedObjectContext?.save()
         }
-//        printDatabaseStatistics()
+        printDatabaseStatistics()
     }
     
     fileprivate func printDatabaseStatistics() {

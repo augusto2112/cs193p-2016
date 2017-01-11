@@ -16,9 +16,7 @@ class MentionsTableViewController: CoreDataTableViewController {
         }
     }
     
-    fileprivate var context: NSManagedObjectContext? =
-        (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
-
+    fileprivate var context: NSManagedObjectContext? = Context.getContext()
     
     fileprivate func updateUI() {
         if searchTerm != nil && context != nil {

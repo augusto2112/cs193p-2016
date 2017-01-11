@@ -7,6 +7,15 @@
 //
 
 import Foundation
-
+import UIKit
+import CoreData
 
 let tweetSearches = "recent tweets"
+
+
+class Context {    
+    class func getContext() -> NSManagedObjectContext? {
+        return (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
+    }
+}
+
